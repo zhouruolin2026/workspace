@@ -17,7 +17,7 @@ print(df)
 print(df[["id", "name"]])
 
 # select id, name as s_name from df
-print(df[["id", "name"]].rename(columns={"name": "s_name"}))
+print(df[["id", "name"]].rename(columns={"name": "s_name"})) # type: ignore
 
 # select id, age % 2 as jiou from df;
 df["jiou"] = df["age"] % 2
