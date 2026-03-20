@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>游戏大厅</title>
+  <style>
+    body {
+      background: #0f0f23;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 { color: #00d4aa; margin-bottom: 40px; }
+    .game-list {
+      display: flex;
+      gap: 30px;
+    }
+    .game-card {
+      background: #1a1a2e;
+      border: 2px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 30px 50px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: #fff;
+    }
+    .game-card:hover {
+      border-color: #00d4aa;
+      transform: scale(1.05);
+    }
+    .game-icon { font-size: 48px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🎮 游戏大厅</h1>
+  <div class="game-list">
+    <a href="snake.html" class="game-card">
+      <div class="game-icon">🐍</div>
+      <div>贪吃蛇</div>
+    </a>
+    <a href="tetris.html" class="game-card">
+      <div class="game-icon">🧱</div>
+      <div>俄罗斯方块</div>
+    </a>
+  </div>
+</body>
+</html>
