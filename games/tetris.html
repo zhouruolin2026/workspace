@@ -269,9 +269,9 @@
     
     function startGame() {
       if (running) return;
+      init();
       running = true;
       paused = false;
-      init();
       loop = setInterval(gameLoop, dropInterval);
     }
     
@@ -306,13 +306,13 @@
     
     // 虚拟按键
     const buttons = {
-      'btn-start': startGame,
-      'btn-rotate': () => { if (running && !paused) { rotate(); draw(); } },
-      'btn-left': () => { if (running && !paused) { move(-1, 0); draw(); } },
-      'btn-right': () => { if (running && !paused) { move(1, 0); draw(); } },
-      'btn-drop': () => { if (running && !paused) { hardDrop(); draw(); } },
-      'btn-pause': pauseGame,
-      'btn-restart': restartGame
+      'btn-start': () => { console.log('start clicked'); startGame(); },
+      'btn-rotate': () => { console.log('rotate', running, paused); if (running && !paused) { rotate(); draw(); } },
+      'btn-left': () => { console.log('left', running, paused); if (running && !paused) { move(-1, 0); draw(); } },
+      'btn-right': () => { console.log('right', running, paused); if (running && !paused) { move(1, 0); draw(); } },
+      'btn-drop': () => { console.log('drop', running, paused); if (running && !paused) { hardDrop(); draw(); } },
+      'btn-pause': () => { console.log('pause clicked'); pauseGame(); },
+      'btn-restart': () => { console.log('restart clicked'); restartGame(); }
     };
     
     Object.entries(buttons).forEach(([id, action]) => {
