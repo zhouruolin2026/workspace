@@ -14,13 +14,16 @@
 </head>
 <body>
   <canvas id="c" width="300" height="450"></canvas>
-  <div id="controls"><button class="btn" onclick="start()">开始</button></div>
+  <div id="controls">
+    <button class="btn" onclick="restart()">重新开始</button>
+  </div>
   <script>
     const c = document.getElementById('c'), ctx = c.getContext('2d');
     let birdY=225,birdV=0,pipes=[],score=0,best=0,running=0,gap=120;
     function draw(){ctx.fillStyle='#70c5ce';ctx.fillRect(0,0,300,450);ctx.fillStyle='#ded895';ctx.fillRect(0,410,300,40);ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(50,birdY,15,0,7);ctx.fill();ctx.fillStyle='#000';ctx.beginPath();ctx.arc(55,birdY-5,3,0,7);ctx.fill();pipes.forEach(p=>{ctx.fillStyle='#4caf50';ctx.fillRect(p.x,0,40,p.top);ctx.fillRect(p.x,p.top+gap,40,450-p.top-gap)});ctx.fillStyle='#fff';ctx.font='20px sans-serif';ctx.fillText(score,20,40);ctx.font='12px sans-serif';ctx.fillText('最高: '+best,20,60);}
     function update(){birdV+=0.5;birdY+=birdV;if(birdY<15||birdY>435){running=0;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,300,450);ctx.fillStyle='#f44336';ctx.font='28px sans-serif';ctx.textAlign='center';ctx.fillText('游戏结束',150,200);ctx.fillStyle='#fff';ctx.font='16px sans-serif';ctx.fillText('得分: '+score,150,240);ctx.fillText('最高: '+best,150,270);return}pipes.forEach(p=>{if(p.x+40<50&&p.x+40>10){score++;if(score>best)best=score}if(p.x<-40)pipes.shift()});pipes.forEach(p=>p.x-=3);if(pipes.length==0||pipes[pipes.length-1].x<200)pipes.push({x:300,top:Math.random()*200+50});draw();if(running)requestAnimationFrame(update)}
     function start(){if(running)return;birdY=225;birdV=0;pipes=[];score=0;running=1;update()}
+    function restart(){running=0;birdY=225;birdV=0;pipes=[];score=0;running=1;update()}
     c.ontouchstart=e=>{if(!running)start();else birdV=-8;e.preventDefault()};
     document.onkeydown=e=>{if(e.key==' '||e.key=='ArrowUp'){if(!running)start();else birdV=-8}};
     draw();
