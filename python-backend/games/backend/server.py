@@ -7,6 +7,7 @@ import uuid
 
 from snake import game_manager as snake_manager
 from tetris import tetris_manager
+from game2048 import game_2048_manager
 
 app = Flask(__name__, static_folder='../frontend')
 
@@ -146,6 +147,51 @@ def tetris_pause(game_id):
 def tetris_reset(game_id):
     """重置游戏"""
     game = tetris_manager.get_game(game_id)
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+    
+    game.reset()
+    return jsonify(game.get_state())
+
+
+# ========== 2048 API ==========
+
+@app.route('/api/2048/new', methods=['POST'])
+def game2048_new():
+    """创建新游戏"""
+    game_id = str(uuid.uuid4())[:8]
+    data = request.get_json(silent=True) or {}
+    size = data.get('size', 4)
+    game = game_2048_manager.create_game(game_id, size)
+    return jsonify({'game_id': game_id, 'state': game.get_state()})
+
+
+@app.route('/api/2048/<game_id>/state', methods=['GET'])
+def game2048_state(game_id):
+    """获取游戏状态"""
+    game = game_2048_manager.get_game(game_id)
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+    return jsonify(game.get_state())
+
+
+@app.route('/api/2048/<game_id>/move', methods=['POST'])
+def game2048_move(game_id):
+    """执行移动"""
+    game = game_2048_manager.get_game(game_id)
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+    
+    data = request.get_json(silent=True) or {}
+    direction = data.get('direction', '')
+    changed = game.move(direction)
+    return jsonify({'changed': changed, **game.get_state()})
+
+
+@app.route('/api/2048/<game_id>/reset', methods=['POST'])
+def game2048_reset(game_id):
+    """重置游戏"""
+    game = game_2048_manager.get_game(game_id)
     if not game:
         return jsonify({'error': 'Game not found'}), 404
     
