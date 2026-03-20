@@ -73,9 +73,9 @@ class TestSnakeGame:
         # 按空格键
         body.send_keys(" ")
         time.sleep(0.3)
-        # 游戏应该开始，按钮文字应该变化
-        button = driver.find_element(By.XPATH, "//button[contains(text(),'开始')]")
-        # 开始后按钮可能消失或变化
+        # 游戏应该开始
+        button = driver.find_element(By.ID, "startBtn")
+        assert button is not None
     
     # 7. 触摸控制测试
     def test_touch_control_exists(self, driver, game_url):

@@ -8,30 +8,28 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; overflow: hidden; padding: 12px; }
     .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    h1 { font-size: 1rem; color: #00d4aa; margin-bottom: 4px; }
-    canvas { width: min(360px, 92vw); height: auto; max-height: 70vh; border: 2px solid #00d4aa; border-radius: 6px; background: #1a1a2e; }
-    #controls { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: min(360px, 92vw); }
-    .btn { flex: 1; min-width: 80px; padding: 10px 6px; border: none; border-radius: 8px; background: #2a2a4a; color: #00d4aa; font-size: 13px; }
-    #score { font-size: 12px; color: #888; margin-top: 4px; }
+    canvas { width: min(380px, 96vw); height: auto; max-height: 72vh; border: 2px solid #00d4aa; border-radius: 8px; background: #1a1a2e; }
+    #controls { margin-top: 8px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; width: min(380px, 96vw); }
+    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 18px; font-weight: 700; }
+    #score { font-size: 13px; color: #8fd3c7; margin-top: 6px; }
   </style>
 </head>
 <body>
   <div class="game-shell">
-    <h1>🧱 俄罗斯方块</h1>
-    <canvas id="c" width="240" height="480"></canvas>
+    <canvas id="c" width="300" height="600"></canvas>
     <div id="score">得分: <span>0</span></div>
     <div id="controls">
-      <button class="btn" id="startBtn" onclick="start()">开始</button>
-      <button class="btn" id="rotateBtn" onclick="rotate()">旋转</button>
-      <button class="btn" id="leftBtn" onclick="move(-1,0)">左</button>
-      <button class="btn" id="rightBtn" onclick="move(1,0)">右</button>
-      <button class="btn" id="dropBtn" onclick="drop()">下落</button>
-      <button class="btn" id="restartBtn" onclick="restart()">重置</button>
+      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">▶</button>
+      <button class="btn" id="rotateBtn" aria-label="旋转" onclick="rotate()">⟳</button>
+      <button class="btn" id="leftBtn" aria-label="左移" onclick="move(-1,0)">◀</button>
+      <button class="btn" id="rightBtn" aria-label="右移" onclick="move(1,0)">▶</button>
+      <button class="btn" id="dropBtn" aria-label="下落" onclick="drop()">▼</button>
+      <button class="btn" id="restartBtn" aria-label="重置" onclick="restart()">↺</button>
     </div>
   </div>
   <script>
     const c = document.getElementById('c'), ctx = c.getContext('2d');
-    const COLS = 10, ROWS = 20, CELL = 24, OFFSET_X = 0, OFFSET_Y = 0;
+    const COLS = 10, ROWS = 20, CELL = 30, OFFSET_X = 0, OFFSET_Y = 0;
     const SHAPES = [[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[0,1,1],[1,1,0]],[[1,1,0],[0,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]]];
     const COLORS = ['#00f5ff','#ffeb3b','#9c27b0','#4caf50','#f44336','#2196f3','#ff9800'];
     let board = [], piece = null, nextPiece = null, score = 0, running = 0, interval = null;

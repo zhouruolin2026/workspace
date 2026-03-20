@@ -8,35 +8,29 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; padding: 12px; }
     .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; background: #2a2a4a; padding: 10px; border-radius: 10px; }
-    .cell { width: 72px; height: 72px; background: #1a1a2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 9px; background: #2a2a4a; padding: 12px; border-radius: 12px; }
+    .cell { width: 76px; height: 76px; background: #1a1a2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
     .c2{background:#eee4da;color:#776e65}.c4{background:#ede0c8;color:#776e65}.c8{background:#f2b179;color:#fff}.c16{background:#f59563;color:#fff}.c32{background:#f67c5f;color:#fff}.c64{background:#f65e3b;color:#fff}.c128{background:#edcf72;color:#fff}.c256{background:#edcc61;color:#fff}.c512{background:#edc850;color:#fff}.c1024{background:#edc53f;color:#fff}.c2048{background:#edc22e;color:#fff}
-    #controls { margin-top: 12px; width: min(360px, 92vw); display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .btn { width: 100%; padding: 11px 20px; border: none; border-radius: 8px; background: #2a2a4a; color: #00d4aa; font-size: 14px; }
-    #score { margin-top: 10px; color: #888; }
-    #dpad { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .dpad-row { display: flex; gap: 4px; }
-    .dpad-btn { width: 64px; height: 48px; border: none; border-radius: 8px; background: #2a2a4a; color: #00d4aa; font-size: 18px; }
+    #hud { margin-top: 8px; width: min(380px, 96vw); display: flex; justify-content: space-between; align-items: center; }
+    #score { color: #8fd3c7; font-size: 15px; }
+    .mini-btn { width: 40px; height: 34px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 18px; font-weight: 700; }
+    #controls { margin-top: 18px; width: min(380px, 96vw); display: flex; justify-content: center; gap: 8px; }
+    .dpad-btn { width: 74px; height: 44px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 18px; }
     .dpad-btn:active { background: #1a1a2e; }
   </style>
 </head>
 <body>
   <div class="game-shell">
     <div id="grid"></div>
-    <div id="score">得分: <span id="s">0</span></div>
-    <div id="controls">
-      <button class="btn" id="newGameBtn" onclick="init()">新游戏</button>
-    <!-- 虚拟方向键 -->
-    <div id="dpad">
-      <div class="dpad-row">
-        <button class="dpad-btn" id="upBtn" onclick="move(0)">▲</button>
-      </div>
-      <div class="dpad-row">
-        <button class="dpad-btn" id="leftBtn" onclick="move(2)">◀</button>
-        <button class="dpad-btn" id="downBtn" onclick="move(1)">▼</button>
-        <button class="dpad-btn" id="rightBtn" onclick="move(3)">▶</button>
-      </div>
+    <div id="hud">
+      <div id="score">得分: <span id="s">0</span></div>
+      <button class="mini-btn" id="newGameBtn" aria-label="新游戏" onclick="init()">↺</button>
     </div>
+    <div id="controls">
+      <button class="dpad-btn" id="leftBtn" onclick="move(2)">◀</button>
+      <button class="dpad-btn" id="upBtn" onclick="move(0)">▲</button>
+      <button class="dpad-btn" id="downBtn" onclick="move(1)">▼</button>
+      <button class="dpad-btn" id="rightBtn" onclick="move(3)">▶</button>
     </div>
   </div>
   <script>
