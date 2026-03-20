@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>2048</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0f0f23;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+      color: #fff;
+    }
+    h1 { font-size: 1.5rem; color: #00d4aa; margin-bottom: 10px; }
+    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; background: #2a2a4a; padding: 8px; border-radius: 8px; }
+    .cell { width: 70px; height: 70px; background: #1a1a2e; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+    .c2{background:#eee4da;color:#776e65}.c4{background:#ede0c8;color:#776e65}.c8{background:#f2b179;color:#fff}
+    .c16{background:#f59563;color:#fff}.c32{background:#f67c5f;color:#fff}.c64{background:#f65e3b;color:#fff}
+    .c128{background:#edcf72;color:#fff}.c256{background:#edcc61;color:#fff}.c512{background:#edc850;color:#fff}
+    .c1024{background:#edc53f;color:#fff}.c2048{background:#edc22e;color:#fff}
+    #controls { margin-top: 15px; display: flex; gap: 8px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; background: #2a2a4a; color: #00d4aa; font-size: 14px; }
+    #score { margin-top: 10px; color: #888; }
+  </style>
+</head>
+<body>
+  <h1>🎯 2048</h1>
+  <div id="grid"></div>
+  <div id="score">得分: <span id="s">0</span></div>
+  <div id="controls">
+    <button class="btn" onclick="init()">新游戏</button>
+  </div>
+  <script>
+    let board=[],score=0;
+    function init(){board=Array(4).fill().map(()=>Array(4).fill(0));score=0;add();add();draw()}
+    function add(){let e=[];for(let i=0;i<4;i++)for(let j=0;j<4;j++)if(!board[i][j])e.push([i,j]);if(e.length){let p=e[Math.floor(Math.random()*e.length)];board[p[0]][p[1]]=Math.random()<0.9?2:4}}
+    function draw(){let g=document.getElementById('grid');g.innerHTML='';for(let i=0;i<4;i++)for(let j=0;j<4;j++){let d=document.createElement('div');d.className='cell'+(board[i][j]?' c'+board[i][j]:'');d.textContent=board[i][j]||'';g.appendChild(d)}document.getElementById('s').textContent=score}
+    function slide(a){let b=[];for(let i=0;i<4;i++){let r=a[i].filter(x=>x);for(let j=0;j<r.length-1;j++)if(r[j]==r[j+1]){r[j]*=2;score+=r[j];r.splice(j+1,1)}while(r.length<4)r.push(0);b.push(r)}return b}
+    function trans(){let b=Array(4).fill().map(()=>Array(4).fill(0));for(let i=0;i<4;i++)for(let j=0;j<4;j++)b[i][j]=board[j][i];return b}
+    function move(d){
+      let b=JSON.parse(JSON.stringify(board));if(d==0)board=slide(trans());else if(d==1)board=transpose=trans();board=slide(transpose);if(d==2)board=trans().map(r=>r.reverse()).map(trans);else if(d==3)board=trans().map(trans);let c=JSON.stringify(board);if(c!=JSON.stringify(b)){add();draw()}
+    }
+    document.onkeydown=e=>{if(e.key=='ArrowUp')move(0);if(e.key=='ArrowDown')move(1);if(e.key=='ArrowLeft')move(2);if(e.key=='ArrowRight')move(3)};
+    let sx,sy;document.ontouchstart=e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY};
+    document.ontouchend=e=>{let dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>Math.abs(dy)){if(dx>30)move(3);else if(dx<-30)move(2)}else{if(dy>30)move(1);else if(dy<-30)move(0)}};
+    init();
+  </script>
+</body>
+</html>

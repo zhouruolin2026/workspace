@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>跳跳鸟</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0f0f23;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    h1 { font-size: 1.2rem; color: #00d4aa; margin-bottom: 8px; }
+    canvas { border: 2px solid #00d4aa; border-radius: 8px; background: #70c5ce; }
+    #controls { margin-top: 8px; }
+    .btn { padding: 8px 16px; border: none; border-radius: 6px; background: #2a2a4a; color: #00d4aa; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>🐦 跳跳鸟</h1>
+  <canvas id="c" width="300" height="450"></canvas>
+  <div id="controls">
+    <button class="btn" onclick="start()">开始</button>
+  </div>
+  <script>
+    const c = document.getElementById('c'), ctx = c.getContext('2d');
+    let birdY=225,birdV=0,pipes=[],score=0,best=0,running=0,gap=120,frame=0;
+    function draw(){
+      ctx.fillStyle='#70c5ce';ctx.fillRect(0,0,300,450);
+      ctx.fillStyle='#ded895';ctx.fillRect(0,410,300,40);
+      // bird
+      ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(50,birdY,15,0,7);ctx.fill();
+      ctx.fillStyle='#000';ctx.beginPath();ctx.arc(55,birdY-5,3,0,7);ctx.fill();
+      // pipes
+      pipes.forEach(p=>{
+        ctx.fillStyle='#4caf50';ctx.fillRect(p.x,0,40,p.top);ctx.fillRect(p.x,p.top+gap,40,450-p.top-gap);
+        ctx.fillStyle='#388e3c';ctx.fillRect(p.x+5,0,5,p.top);ctx.fillRect(p.x+5,p.top+gap,5,450-p.top-gap);
+      });
+      ctx.fillStyle='#fff';ctx.font='20px sans-serif';ctx.fillText(score,20,40);ctx.font='12px sans-serif';ctx.fillText('最高: '+best,20,60);
+    }
+    function update(){
+      if(!running)return;
+      birdV+=0.5;birdY+=birdV;
+      if(birdY<15||birdY>435){gameOver();return}
+      pipes.forEach(p=>{
+        if(p.x+40<50&&p.x+40>10){score++;if(score>best)best=score}
+        if(p.x<-40)pipes.shift();
+      });
+      frame++;
+      if(frame%100==0)pipes.push({x:300,top:Math.random()*200+50});
+      pipes.forEach(p=>p.x-=3);
+      draw();requestAnimationFrame(update);
+    }
+    function start(){
+      if(running)return;
+      birdY=225;birdV=0;pipes=[];score=0;frame=0;running=1;update();
+    }
+    function gameOver(){
+      running=0;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,300,450);
+      ctx.fillStyle='#f44336';ctx.font='28px sans-serif';ctx.textAlign='center';ctx.fillText('游戏结束',150,200);
+      ctx.fillStyle='#fff';ctx.font='16px sans-serif';ctx.fillText('得分: '+score,150,240);ctx.fillText('最高: '+best,150,270);
+    }
+    c.ontouchstart=e=>{if(!running)start();else birdV=-8;e.preventDefault()};
+    document.onkeydown=e=>{if(e.key==' '||e.key=='ArrowUp'){if(!running)start();else birdV=-8}};
+    draw();
+  </script>
+</body>
+</html>
