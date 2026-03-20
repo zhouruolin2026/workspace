@@ -2,6 +2,10 @@
 俄罗斯方块单元测试
 """
 import pytest
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from tetris import TetrisGame, Piece, tetris_manager, SHAPES, COLORS
 
 

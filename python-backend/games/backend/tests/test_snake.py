@@ -2,6 +2,10 @@
 贪吃蛇单元测试
 """
 import pytest
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from snake import SnakeGame, Direction, game_manager
 
 
@@ -68,11 +72,11 @@ class TestSnakeGame:
     def test_hit_self(self):
         """测试撞自己"""
         game = SnakeGame()
-        # 制造撞自己的情况
-        game.snake = [(5, 5), (6, 5), (6, 6), (5, 6), (4, 6)]
-        game.direction = Direction.UP
-        game.next_direction = Direction.UP
-        game.step()  # 会撞到 (5,5)
+        # 制造撞自己的情况 - 蛇头向上移动会撞到自己的身体
+        game.snake = [(5, 5), (5, 6), (6, 6), (6, 5), (6, 4)]
+        game.direction = Direction.DOWN
+        game.next_direction = Direction.DOWN
+        game.step()  # 会撞到 (5,6)
         assert game.game_over is True
     
     def test_reset(self):
