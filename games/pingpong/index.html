@@ -24,7 +24,7 @@
     let x=150,y=200,dx=3,dy=3,p1y=160,p2y=160,pw=80,score=0,running=0,paused=0;
     function draw(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,300,400);ctx.setLineDash([10,10]);ctx.strokeStyle='#333';ctx.beginPath();ctx.moveTo(150,0);ctx.lineTo(150,400);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fillStyle='#00d4aa';ctx.fill();ctx.fillStyle='#4caf50';ctx.fillRect(10,p1y,8,pw);ctx.fillStyle='#f44336';ctx.fillRect(282,p2y,8,pw);ctx.fillStyle='#fff';ctx.font='14px sans-serif';ctx.fillText('得分: '+score,10,20);}
     function move(){if(!running)return;x+=dx;y+=dy;if(y<8||y>392)dy=-dy;if(x<18&&y>p1y&&y<p1y+pw)dx=-dx;if(x>282&&y>p2y&&y<p2y+pw)dx=-dx;if(x<10||x>290){running=0;ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,300,400);ctx.fillStyle='#f44336';ctx.font='24px sans-serif';ctx.textAlign='center';ctx.fillText('游戏结束',150,200);ctx.fillStyle='#fff';ctx.font='16px sans-serif';ctx.fillText('得分: '+score,150,230);return}if(y>p2y+pw/2)p2y+=3;else p2y-=3;if(p2y<0)p2y=0;if(p2y>320)p2y=320;draw();requestAnimationFrame(move);}
-    function start(){if(!running&&!paused){running=1;move()}}
+    function start(){if(!running){running=1;paused=0;draw();move()}}
     function pause(){if(running){paused=1;running=0;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,300,400);ctx.fillStyle='#ffeb3b';ctx.font='30px sans-serif';ctx.textAlign='center';ctx.fillText('暂停',150,200);}}
     function restart(){running=0;paused=0;x=150;y=200;dx=3;dy=3;p1y=160;score=0;draw()}
     let t=0;c.ontouchstart=e=>{t=1};c.ontouchmove=e=>{if(t){p1y=e.touches[0].clientY-c.getBoundingClientRect().top-pw/2;if(p1y<0)p1y=0;if(p1y>320)p1y=320}};c.ontouchend=e=>{t=0};
