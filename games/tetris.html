@@ -317,18 +317,26 @@
     
     Object.entries(buttons).forEach(([id, action]) => {
       const btn = document.getElementById(id);
+      let touched = false;
+      
       btn.addEventListener('touchstart', e => {
+        touched = true;
         e.preventDefault();
         action();
         btn.style.transform = 'scale(0.95)';
       }, { passive: false });
+      
       btn.addEventListener('touchend', e => {
         e.preventDefault();
         btn.style.transform = '';
+        setTimeout(() => { touched = false; }, 100);
       });
-      btn.addEventListener('mousedown', e => {
-        e.preventDefault();
-        action();
+      
+      btn.addEventListener('click', e => {
+        if (!touched) {
+          e.preventDefault();
+          action();
+        }
       });
     });
     
