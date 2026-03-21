@@ -181,3 +181,10 @@ class TestFlappyBirdGame:
         assert state["running"] == 1
         assert 225 <= state["birdY"] <= 226
         assert state["score"] == 0
+
+    def test_start_icon_and_feedback_style(self, driver, game_url):
+        driver.get(game_url)
+        icon = driver.execute_script("return document.getElementById('startBtn').textContent.trim();")
+        src = driver.page_source
+        assert icon == "▶"
+        assert ".btn:active" in src

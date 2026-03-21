@@ -14,13 +14,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       font-family: "Avenir Next", "PingFang SC", sans-serif;
       color: #eaf2ff;
       padding: 14px;
+      overflow: hidden;
     }
     .game-shell {
       width: min(420px, 100%);
+      max-height: calc(100vh - 18px);
       background: rgba(10, 20, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
@@ -30,12 +32,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-    canvas { width: min(360px, 92vw); height: auto; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #f5f0e7; }
+    canvas { width: min(230px, 62vw); height: auto; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #f5f0e7; }
     #score { width: min(360px, 92vw); text-align: right; font-size: 14px; color: #b7cced; }
     #controls { width: min(360px, 92vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    .btn:active { transform: translateY(1px); filter: brightness(1.08); }
   </style>
 </head>
 <body>
@@ -43,7 +46,7 @@
     <div id="score">得分: <span>0</span></div>
     <canvas id="c" width="360" height="500"></canvas>
     <div id="controls">
-      <button class="btn" id="startBtn" onclick="startGame()">⏻</button>
+      <button class="btn" id="startBtn" onclick="startGame()">▶</button>
       <button class="btn" id="pauseBtn" onclick="pauseGame()">⏸</button>
       <button class="btn" id="restartBtn" onclick="restartGame()">↺</button>
     </div>
@@ -108,6 +111,15 @@
       return center >= left && center <= right;
     }
 
+    function normalizeRound() {
+      // 避免平台坐标不断向右漂移，导致目标回到玩家后方或超出可见区。
+      const baseline = 70;
+      from = { x: baseline, y: from.y, w: from.w };
+      player.x = from.x + from.w / 2 - player.size / 2;
+      player.y = from.y - 30;
+      newTarget();
+    }
+
     function jump() {
       if (!running || paused) return;
       const distance = 34 + power * 0.75;
@@ -124,9 +136,7 @@
           score += 1;
           document.querySelector('#score span').textContent = score;
           from = { ...to };
-          player.x = from.x + from.w / 2 - player.size / 2;
-          player.y = from.y - 30;
-          newTarget();
+          normalizeRound();
           draw();
         } else {
           running = 0;

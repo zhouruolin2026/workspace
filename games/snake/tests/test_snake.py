@@ -94,6 +94,14 @@ class TestSnakeGame:
         )
         assert score_text == "0"
 
+    def test_start_icon_and_feedback_style(self, driver, game_url):
+        driver.get(game_url)
+        time.sleep(0.3)
+        icon = driver.execute_script("return document.getElementById('startBtn').textContent.trim();")
+        src = driver.page_source
+        assert icon == "▶"
+        assert ".btn:active" in src
+
     def test_arrow_key_mapping(self, driver, game_url):
         """测试方向键映射正确"""
         driver.get(game_url)

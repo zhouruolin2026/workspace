@@ -61,3 +61,10 @@ class TestGame2048UI:
         new_board = driver.execute_script("return JSON.stringify(board)")
         assert isinstance(old_board, str)
         assert isinstance(new_board, str)
+
+    def test_start_icon_and_feedback_style(self, driver, game_url):
+        driver.get(game_url)
+        icon = driver.execute_script("return document.getElementById('startBtn').textContent.trim();")
+        src = driver.page_source
+        assert icon == "▶"
+        assert ".btn:active" in src

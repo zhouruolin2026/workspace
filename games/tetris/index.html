@@ -14,13 +14,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       font-family: "Avenir Next", "PingFang SC", sans-serif;
       color: #eef4ff;
       padding: 14px;
+      overflow: hidden;
     }
     .game-shell {
       width: min(420px, 100%);
+      max-height: calc(100vh - 18px);
       background: rgba(10, 20, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
@@ -30,10 +32,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     canvas {
-      width: min(300px, 78vw);
+      width: min(190px, 48vw);
       height: auto;
       border: 1px solid rgba(173, 214, 255, 0.4);
       border-radius: 12px;
@@ -45,7 +47,9 @@
     #mainControls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(380px, 96vw); }
     .dpad-row { display: flex; gap: 8px; }
     .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    .btn:active { transform: translateY(1px); filter: brightness(1.08); }
     .dpad-btn { width: 72px; height: 40px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 18px; }
+    .dpad-btn:active { transform: translateY(1px); filter: brightness(1.08); }
   </style>
 </head>
 <body>
@@ -63,7 +67,7 @@
       </div>
     </div>
     <div id="mainControls">
-      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">⏻</button>
+      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">▶</button>
       <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
       <button class="btn" id="restartBtn" aria-label="重置" onclick="restart()">↺</button>
     </div>

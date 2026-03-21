@@ -63,3 +63,10 @@ class TestBreakoutGame:
         assert state["score"] == 0
         assert state["x"] == 150
         assert state["y"] == 350
+
+    def test_start_icon_and_feedback_style(self, driver, game_url):
+        driver.get(game_url)
+        icon = driver.execute_script("return document.getElementById('startBtn').textContent.trim();")
+        src = driver.page_source
+        assert icon == "▶"
+        assert ".btn:active" in src

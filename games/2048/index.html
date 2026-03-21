@@ -14,13 +14,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       font-family: "Avenir Next", "PingFang SC", sans-serif;
       color: #eaf2ff;
       padding: 14px;
+      overflow: hidden;
     }
     .game-shell {
       width: min(420px, 100%);
+      max-height: calc(100vh - 18px);
       background: rgba(10, 20, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
@@ -30,14 +32,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 9px; background: #293e67; padding: 12px; border-radius: 12px; }
-    .cell { width: 76px; height: 76px; background: #172746; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; background: #293e67; padding: 10px; border-radius: 12px; }
+    .cell { width: 64px; height: 64px; background: #172746; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
     .c2{background:#eee4da;color:#776e65}.c4{background:#ede0c8;color:#776e65}.c8{background:#f2b179;color:#fff}.c16{background:#f59563;color:#fff}.c32{background:#f67c5f;color:#fff}.c64{background:#f65e3b;color:#fff}.c128{background:#edcf72;color:#fff}.c256{background:#edcc61;color:#fff}.c512{background:#edc850;color:#fff}.c1024{background:#edc53f;color:#fff}.c2048{background:#edc22e;color:#fff}
     #hud { width: min(380px, 96vw); display: flex; justify-content: flex-end; align-items: center; }
     #score { color: #b7cced; font-size: 14px; text-align: right; }
     .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    .btn:active { transform: translateY(1px); filter: brightness(1.08); }
     #controls { width: min(380px, 96vw); display: flex; flex-direction: column; align-items: center; gap: 8px; }
     #mainControls { width: min(380px, 96vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .dpad-row { display: flex; gap: 8px; }
@@ -62,7 +65,7 @@
       </div>
     </div>
     <div id="mainControls">
-      <button class="btn" id="startBtn" aria-label="开始" onclick="startGame()">⏻</button>
+      <button class="btn" id="startBtn" aria-label="开始" onclick="startGame()">▶</button>
       <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
       <button class="btn" id="restartBtn" aria-label="重开" onclick="restartGame()">↺</button>
     </div>

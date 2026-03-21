@@ -14,13 +14,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       font-family: "Avenir Next", "PingFang SC", sans-serif;
       color: #eaf2ff;
       padding: 14px;
+      overflow: hidden;
     }
     .game-shell {
       width: min(420px, 100%);
+      max-height: calc(100vh - 18px);
       background: rgba(10, 20, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
@@ -30,12 +32,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     canvas {
-      width: min(360px, 92vw);
+      width: min(230px, 62vw);
       height: auto;
-      max-height: 70vh;
+      max-height: 52vh;
       border: 1px solid rgba(173, 214, 255, 0.4);
       border-radius: 12px;
       background: #13213f;
@@ -80,6 +82,7 @@
       color: #eef5ff;
       font-size: 18px;
     }
+    .dpad-btn:active { transform: translateY(1px); filter: brightness(1.08); }
   </style>
 </head>
 <body>
@@ -97,7 +100,7 @@
       </div>
     </div>
     <div id="mainControls">
-      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">⏻</button>
+      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">▶</button>
       <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
       <button class="btn" id="restartBtn" aria-label="重开" onclick="restartGame()">↺</button>
     </div>

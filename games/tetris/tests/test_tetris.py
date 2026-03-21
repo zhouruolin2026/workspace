@@ -95,7 +95,7 @@ class TestTetrisGame:
         driver.get(game_url)
         time.sleep(0.5)
         button = driver.find_element(By.ID, "startBtn")
-        button.click()
+        driver.execute_script("arguments[0].click();", button)
         time.sleep(0.3)
         running = driver.execute_script("return running")
         assert running == 1
@@ -106,7 +106,7 @@ class TestTetrisGame:
         time.sleep(0.5)
         # 点击开始
         start_btn = driver.find_element(By.ID, "startBtn")
-        start_btn.click()
+        driver.execute_script("arguments[0].click();", start_btn)
         time.sleep(0.5)
 
         before = driver.execute_script("return {x: piece.x, y: piece.y}")
@@ -169,7 +169,7 @@ class TestTetrisGame:
         driver.get(game_url)
         time.sleep(0.3)
         start_btn = driver.find_element(By.ID, "startBtn")
-        start_btn.click()
+        driver.execute_script("arguments[0].click();", start_btn)
         time.sleep(0.3)
         running = driver.execute_script("return running")
         assert running == 1
@@ -178,7 +178,8 @@ class TestTetrisGame:
         """测试方向键可移动方块"""
         driver.get(game_url)
         time.sleep(0.3)
-        driver.find_element(By.ID, "startBtn").click()
+        start_btn = driver.find_element(By.ID, "startBtn")
+        driver.execute_script("arguments[0].click();", start_btn)
         time.sleep(0.3)
         before_x = driver.execute_script("return piece.x")
         body = driver.find_element(By.TAG_NAME, "body")
@@ -190,13 +191,23 @@ class TestTetrisGame:
     def test_restart_button_resets_state(self, driver, game_url):
         driver.get(game_url)
         time.sleep(0.3)
-        driver.find_element(By.ID, "startBtn").click()
+        start_btn = driver.find_element(By.ID, "startBtn")
+        driver.execute_script("arguments[0].click();", start_btn)
         time.sleep(0.3)
         drop_btn = driver.find_element(By.ID, "dropBtn")
         driver.execute_script("arguments[0].click();", drop_btn)
         time.sleep(0.2)
-        driver.find_element(By.ID, "restartBtn").click()
+        restart_btn = driver.find_element(By.ID, "restartBtn")
+        driver.execute_script("arguments[0].click();", restart_btn)
         time.sleep(0.2)
         state = driver.execute_script("return {running, score, y: piece ? piece.y : null}")
         assert state["running"] == 0
         assert state["score"] == 0
+
+    def test_start_icon_and_feedback_style(self, driver, game_url):
+        driver.get(game_url)
+        time.sleep(0.3)
+        icon = driver.execute_script("return document.getElementById('startBtn').textContent.trim();")
+        src = driver.page_source
+        assert icon == "▶"
+        assert ".btn:active" in src

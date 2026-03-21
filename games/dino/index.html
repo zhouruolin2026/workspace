@@ -14,13 +14,15 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      height: 100vh;
       font-family: "Avenir Next", "PingFang SC", sans-serif;
       color: #eaf2ff;
       padding: 14px;
+      overflow: hidden;
     }
     .game-shell {
       width: min(420px, 100%);
+      max-height: calc(100vh - 18px);
       background: rgba(10, 20, 40, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 20px;
@@ -30,12 +32,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
-    canvas { width: min(360px, 92vw); height: auto; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #edf5ff; }
+    canvas { width: min(230px, 62vw); height: auto; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #f7f7f7; }
     #score { width: min(360px, 92vw); text-align: right; font-size: 14px; color: #b7cced; }
     #controls { width: min(360px, 92vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    .btn:active { transform: translateY(1px); filter: brightness(1.08); }
   </style>
 </head>
 <body>
@@ -43,7 +46,7 @@
     <div id="score">得分: <span>0</span></div>
     <canvas id="c" width="360" height="200"></canvas>
     <div id="controls">
-      <button class="btn" id="startBtn" onclick="startGame()">⏻</button>
+      <button class="btn" id="startBtn" onclick="startGame()">▶</button>
       <button class="btn" id="pauseBtn" onclick="pauseGame()">⏸</button>
       <button class="btn" id="restartBtn" onclick="restartGame()">↺</button>
     </div>
@@ -52,27 +55,59 @@
     const c = document.getElementById('c');
     const ctx = c.getContext('2d');
     let running = 0, paused = 0;
-    let dinoY = 150, vy = 0, gravity = 0.6;
+    let dinoY = 148, vy = 0, gravity = 0.6;
     let obstacles = [];
     let score = 0;
-    let speed = 4;
+    let speed = 2.6;
+
+    const DINO_PIXELS = [
+      [0,0,1,1,1,0,0,0],
+      [0,1,1,1,1,1,0,0],
+      [1,1,1,1,1,1,1,0],
+      [1,1,1,1,1,0,1,1],
+      [1,1,1,1,1,1,1,1],
+      [0,1,1,1,1,1,1,0],
+      [0,1,1,0,1,1,0,0],
+      [1,1,0,0,1,1,0,0],
+      [1,0,0,0,1,0,0,0],
+      [1,0,0,0,1,0,0,0]
+    ];
+
+    const CACTUS_PIXELS = [
+      [0,1,0,0],
+      [1,1,1,0],
+      [0,1,0,1],
+      [0,1,1,1],
+      [0,1,0,0],
+      [0,1,0,0],
+      [0,1,0,0],
+      [1,1,1,1]
+    ];
+
+    function drawPixelArt(pattern, x, y, pixel, color) {
+      ctx.fillStyle = color;
+      for (let r = 0; r < pattern.length; r++) {
+        for (let col = 0; col < pattern[r].length; col++) {
+          if (pattern[r][col]) {
+            ctx.fillRect(x + col * pixel, y + r * pixel, pixel, pixel);
+          }
+        }
+      }
+    }
 
     function draw() {
-      ctx.fillStyle = '#edf5ff';
+      ctx.fillStyle = '#f7f7f7';
       ctx.fillRect(0, 0, c.width, c.height);
-      ctx.strokeStyle = '#8fb0d8';
+      ctx.strokeStyle = '#bdbdbd';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(0, 170);
       ctx.lineTo(c.width, 170);
       ctx.stroke();
 
-      ctx.fillStyle = '#1e2f56';
-      ctx.fillRect(50, dinoY, 22, 22);
-      ctx.fillRect(68, dinoY + 7, 10, 8);
+      drawPixelArt(DINO_PIXELS, 48, dinoY, 3, '#3b3b3b');
 
-      ctx.fillStyle = '#3768b3';
-      obstacles.forEach(o => ctx.fillRect(o.x, 170 - o.h, 14, o.h));
+      obstacles.forEach(o => drawPixelArt(CACTUS_PIXELS, o.x, 170 - o.h, 3, '#4a4a4a'));
 
       if (!running && !paused) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
@@ -95,16 +130,17 @@
         vy = 0;
       }
 
-      if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < 230) {
-        obstacles.push({ x: 370, h: Math.random() < 0.5 ? 30 : 42 });
+      if (obstacles.length === 0 || obstacles[obstacles.length - 1].x < 190) {
+        const variation = Math.random() < 0.7 ? 24 : 30;
+        obstacles.push({ x: 370, h: variation });
       }
 
       obstacles.forEach(o => o.x -= speed);
       obstacles = obstacles.filter(o => o.x > -20);
 
       for (const o of obstacles) {
-        const hitX = o.x < 72 && o.x + 14 > 50;
-        const hitY = dinoY + 22 > 170 - o.h;
+        const hitX = o.x < 72 && o.x + 13 > 48;
+        const hitY = dinoY + 30 > 170 - o.h;
         if (hitX && hitY) {
           running = 0;
           paused = 0;
@@ -123,6 +159,7 @@
       }
 
       score += 1;
+      speed = Math.min(5, 2.6 + Math.floor(score / 120) * 0.25);
       document.querySelector('#score span').textContent = Math.floor(score / 8);
       draw();
       requestAnimationFrame(step);
@@ -130,7 +167,7 @@
 
     function jump() {
       if (!running) startGame();
-      if (dinoY >= 148) vy = -9.2;
+      if (dinoY >= 148) vy = -8.4;
     }
 
     function startGame() {
@@ -159,7 +196,7 @@
     function restartGame() {
       running = 0;
       paused = 0;
-      dinoY = 150;
+      dinoY = 148;
       vy = 0;
       obstacles = [];
       score = 0;
