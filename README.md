@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# zhouruolin
-learning coding
-=======
 # 🎮 网页游戏集合
 
 一个包含多个经典网页小游戏的集合，支持手机和电脑浏览器游玩。
@@ -10,6 +6,8 @@ learning coding
 
 | 游戏 | 目录 | 描述 |
 |------|------|------|
+| 🦖 小恐龙快跑 | [games/dino/](games/dino/) | 离线风格跑酷游戏 |
+| 🟫 跳一跳 | [games/jumpjump/](games/jumpjump/) | 经典蓄力跳跃 |
 | 🐍 贪吃蛇 | [games/snake/](games/snake/) | 经典益智游戏 |
 | 🧱 俄罗斯方块 | [games/tetris/](games/tetris/) | 消除方块游戏 |
 | 🧱 打砖块 | [games/breakout/](games/breakout/) | 弹球打砖块 |
@@ -30,6 +28,8 @@ https://zhouruolin2026.github.io/workspace/
 .
 ├── index.html              # 游戏大厅
 ├── games/
+│   ├── dino/              # 小恐龙快跑
+│   ├── jumpjump/          # 跳一跳
 │   ├── snake/             # 贪吃蛇
 │   │   ├── index.html
 │   │   └── README.md
@@ -53,4 +53,3 @@ https://zhouruolin2026.github.io/workspace/
 - 纯 HTML/CSS/JavaScript
 - 无需任何依赖
 - 响应式设计，支持移动端
->>>>>>> 44e714363e4d197235835b4e1208ab2bfaf5ee57

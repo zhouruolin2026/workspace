@@ -6,11 +6,35 @@
   <title>🏓 乒乓球</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; overflow: hidden; padding: 12px; }
-    .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    canvas { width: min(360px, 92vw); height: auto; max-height: 70vh; border: 2px solid #00d4aa; border-radius: 8px; background: #1a1a2e; }
+    body {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 120, 72, 0.25), transparent 38%),
+        radial-gradient(circle at 85% 5%, rgba(73, 165, 255, 0.28), transparent 38%),
+        linear-gradient(140deg, #071328 0%, #111a34 50%, #19112c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Avenir Next", "PingFang SC", sans-serif;
+      color: #eaf2ff;
+      padding: 14px;
+    }
+    .game-shell {
+      width: min(420px, 100%);
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 14px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    canvas { width: min(360px, 92vw); height: auto; max-height: 70vh; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #13213f; }
     #controls { margin-top: 10px; width: min(360px, 92vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 17px; font-weight: 700; }
+    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -24,8 +48,8 @@
   </div>
   <script>
     const c = document.getElementById('c'), ctx = c.getContext('2d');
-    let x=150,y=200,dx=3,dy=3,p1y=160,p2y=160,pw=80,score=0,running=0,paused=0;
-    function draw(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,300,400);ctx.setLineDash([10,10]);ctx.strokeStyle='#333';ctx.beginPath();ctx.moveTo(150,0);ctx.lineTo(150,400);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fillStyle='#00d4aa';ctx.fill();ctx.fillStyle='#4caf50';ctx.fillRect(10,p1y,8,pw);ctx.fillStyle='#f44336';ctx.fillRect(282,p2y,8,pw);ctx.fillStyle='#fff';ctx.font='14px sans-serif';ctx.fillText('得分: '+score,10,20);}
+    let x=150,y=200,dx=2.2,dy=2.2,p1y=150,p2y=150,pw=100,score=0,running=0,paused=0;
+    function draw(){ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,300,400);ctx.setLineDash([10,10]);ctx.strokeStyle='#333';ctx.beginPath();ctx.moveTo(150,0);ctx.lineTo(150,400);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fillStyle='#00d4aa';ctx.fill();ctx.fillStyle='#4caf50';ctx.fillRect(10,p1y,8,pw);ctx.fillStyle='#f44336';ctx.fillRect(282,p2y,8,pw);ctx.fillStyle='#fff';ctx.font='14px sans-serif';ctx.textAlign='right';ctx.fillText('得分: '+score,290,20);ctx.textAlign='left';}
     function move(){if(!running)return;x+=dx;y+=dy;if(y<8||y>392)dy=-dy;if(x<18&&y>p1y&&y<p1y+pw)dx=-dx;if(x>282&&y>p2y&&y<p2y+pw)dx=-dx;if(x<10||x>290){running=0;ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,300,400);ctx.fillStyle='#f44336';ctx.font='24px sans-serif';ctx.textAlign='center';ctx.fillText('游戏结束',150,200);ctx.fillStyle='#fff';ctx.font='16px sans-serif';ctx.fillText('得分: '+score,150,230);return}if(y>p2y+pw/2)p2y+=3;else p2y-=3;if(p2y<0)p2y=0;if(p2y>320)p2y=320;draw();requestAnimationFrame(move);}
     function start(){if(!running){running=1;paused=0;draw();move()}else if(paused){paused=0;running=1;move();}}
     function pauseGame(){
@@ -36,9 +60,9 @@
         paused=0;running=1;move();
       }
     }
-    function restart(){running=0;paused=0;x=150;y=200;dx=3;dy=3;p1y=160;score=0;draw()}
+    function restart(){running=0;paused=0;x=150;y=200;dx=2.2;dy=2.2;p1y=150;p2y=150;pw=100;score=0;draw()}
     let t=0;c.ontouchstart=e=>{t=1};c.ontouchmove=e=>{if(t){p1y=e.touches[0].clientY-c.getBoundingClientRect().top-pw/2;if(p1y<0)p1y=0;if(p1y>320)p1y=320}};c.ontouchend=e=>{t=0};
-    document.onkeydown=e=>{if(e.key=='ArrowUp'&&p1y>0)p1y-=20;if(e.key=='ArrowDown'&&p1y<320)p1y+=20;if(e.key==' '){if(running)pauseGame();else start();e.preventDefault()}};
+    document.onkeydown=e=>{if(e.key=='ArrowUp'&&p1y>0)p1y-=20;if(e.key=='ArrowDown'&&p1y<300)p1y+=20;if(e.key==' '){if(running)pauseGame();else start();e.preventDefault()}};
     draw();
   </script>
 </body>

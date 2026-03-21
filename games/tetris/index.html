@@ -6,26 +6,52 @@
   <title>🧱 俄罗斯方块</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; overflow: hidden; padding: 12px; }
-    .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    canvas { width: min(380px, 96vw); height: auto; max-height: 72vh; border: 2px solid #00d4aa; border-radius: 8px; background: #141425; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
-    #score { font-size: 13px; color: #8fd3c7; margin-top: 6px; }
-    #mainControls { margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(380px, 96vw); }
-    #dpad { margin-top: 8px; width: min(380px, 96vw); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    body {
+      background:
+        radial-gradient(circle at 12% 20%, rgba(255, 133, 72, 0.26), transparent 36%),
+        radial-gradient(circle at 85% 6%, rgba(78, 175, 255, 0.26), transparent 36%),
+        linear-gradient(140deg, #071328 0%, #111a34 50%, #19112c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Avenir Next", "PingFang SC", sans-serif;
+      color: #eef4ff;
+      padding: 14px;
+    }
+    .game-shell {
+      width: min(420px, 100%);
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 14px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    canvas {
+      width: min(300px, 78vw);
+      height: auto;
+      border: 1px solid rgba(173, 214, 255, 0.4);
+      border-radius: 12px;
+      background: #13213f;
+      image-rendering: pixelated;
+    }
+    #score { width: min(300px, 78vw); text-align: right; font-size: 14px; color: #b7cced; }
+    #dpad { width: min(380px, 96vw); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    #mainControls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(380px, 96vw); }
     .dpad-row { display: flex; gap: 8px; }
-    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 17px; font-weight: 700; }
-    .dpad-btn { width: 72px; height: 40px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 18px; }
+    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    .dpad-btn { width: 72px; height: 40px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 18px; }
   </style>
 </head>
 <body>
   <div class="game-shell">
     <canvas id="c" width="300" height="600"></canvas>
     <div id="score">得分: <span>0</span></div>
-    <div id="mainControls">
-      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">⏻</button>
-      <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
-      <button class="btn" id="restartBtn" aria-label="重置" onclick="restart()">↺</button>
-    </div>
     <div id="dpad">
       <div class="dpad-row">
         <button class="dpad-btn" id="rotateBtn" aria-label="旋转" onclick="rotate()">⟳</button>
@@ -35,6 +61,11 @@
         <button class="dpad-btn" id="dropBtn" aria-label="下落" onclick="drop()">▼</button>
         <button class="dpad-btn" id="rightBtn" aria-label="右移" onclick="move(1,0)">▶</button>
       </div>
+    </div>
+    <div id="mainControls">
+      <button class="btn" id="startBtn" aria-label="开始" onclick="start()">⏻</button>
+      <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
+      <button class="btn" id="restartBtn" aria-label="重置" onclick="restart()">↺</button>
     </div>
   </div>
   <script>

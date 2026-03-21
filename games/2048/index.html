@@ -6,19 +6,43 @@
   <title>🎯 2048</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; padding: 12px; }
-    .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 9px; background: #2a2a4a; padding: 12px; border-radius: 12px; }
-    .cell { width: 76px; height: 76px; background: #1a1a2e; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+    body {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 120, 72, 0.25), transparent 38%),
+        radial-gradient(circle at 85% 5%, rgba(73, 165, 255, 0.28), transparent 38%),
+        linear-gradient(140deg, #071328 0%, #111a34 50%, #19112c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Avenir Next", "PingFang SC", sans-serif;
+      color: #eaf2ff;
+      padding: 14px;
+    }
+    .game-shell {
+      width: min(420px, 100%);
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 14px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    #grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 9px; background: #293e67; padding: 12px; border-radius: 12px; }
+    .cell { width: 76px; height: 76px; background: #172746; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
     .c2{background:#eee4da;color:#776e65}.c4{background:#ede0c8;color:#776e65}.c8{background:#f2b179;color:#fff}.c16{background:#f59563;color:#fff}.c32{background:#f67c5f;color:#fff}.c64{background:#f65e3b;color:#fff}.c128{background:#edcf72;color:#fff}.c256{background:#edcc61;color:#fff}.c512{background:#edc850;color:#fff}.c1024{background:#edc53f;color:#fff}.c2048{background:#edc22e;color:#fff}
-    #hud { margin-top: 8px; width: min(380px, 96vw); display: flex; justify-content: space-between; align-items: center; }
-    #score { color: #8fd3c7; font-size: 15px; }
-    #mainControls { margin-top: 8px; width: min(380px, 96vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 17px; font-weight: 700; }
-    #controls { margin-top: 16px; width: min(380px, 96vw); display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    #hud { width: min(380px, 96vw); display: flex; justify-content: flex-end; align-items: center; }
+    #score { color: #b7cced; font-size: 14px; text-align: right; }
+    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
+    #controls { width: min(380px, 96vw); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    #mainControls { width: min(380px, 96vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .dpad-row { display: flex; gap: 8px; }
-    .dpad-btn { width: 74px; height: 44px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 18px; }
-    .dpad-btn:active { background: #1a1a2e; }
+    .dpad-btn { width: 74px; height: 44px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 18px; }
+    .dpad-btn:active { background: rgba(24, 36, 60, 0.95); }
   </style>
 </head>
 <body>
@@ -26,11 +50,6 @@
     <div id="grid"></div>
     <div id="hud">
       <div id="score">得分: <span id="s">0</span></div>
-    </div>
-    <div id="mainControls">
-      <button class="btn" id="startBtn" aria-label="开始" onclick="startGame()">⏻</button>
-      <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
-      <button class="btn" id="restartBtn" aria-label="重开" onclick="restartGame()">↺</button>
     </div>
     <div id="controls">
       <div class="dpad-row">
@@ -41,6 +60,11 @@
         <button class="dpad-btn" id="downBtn" onclick="move(1)">▼</button>
         <button class="dpad-btn" id="rightBtn" onclick="move(3)">▶</button>
       </div>
+    </div>
+    <div id="mainControls">
+      <button class="btn" id="startBtn" aria-label="开始" onclick="startGame()">⏻</button>
+      <button class="btn" id="pauseBtn" aria-label="暂停" onclick="pauseGame()">⏸</button>
+      <button class="btn" id="restartBtn" aria-label="重开" onclick="restartGame()">↺</button>
     </div>
   </div>
   <script>

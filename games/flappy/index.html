@@ -6,11 +6,35 @@
   <title>🐦 跳跳鸟</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0f0f23; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; color: #fff; overflow: hidden; padding: 12px; }
-    .game-shell { width: min(390px, 100vw); display: flex; flex-direction: column; align-items: center; }
-    canvas { width: min(360px, 92vw); height: auto; max-height: 70vh; border: 2px solid #00d4aa; border-radius: 10px; background: #70c5ce; }
+    body {
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255, 120, 72, 0.25), transparent 38%),
+        radial-gradient(circle at 85% 5%, rgba(73, 165, 255, 0.28), transparent 38%),
+        linear-gradient(140deg, #071328 0%, #111a34 50%, #19112c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: "Avenir Next", "PingFang SC", sans-serif;
+      color: #eaf2ff;
+      padding: 14px;
+    }
+    .game-shell {
+      width: min(420px, 100%);
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 14px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    canvas { width: min(360px, 92vw); height: auto; max-height: 70vh; border: 1px solid rgba(173, 214, 255, 0.4); border-radius: 12px; background: #70c5ce; }
     #controls { margin-top: 10px; width: min(360px, 92vw); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: #2a2a4a; color: #00d4aa; font-size: 17px; font-weight: 700; }
+    .btn { width: 100%; height: 38px; border: none; border-radius: 10px; background: rgba(37, 53, 85, 0.95); color: #eef5ff; font-size: 17px; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -24,8 +48,8 @@
   </div>
   <script>
     const c = document.getElementById('c'), ctx = c.getContext('2d');
-    let birdY=225,birdV=0,pipes=[],score=0,best=0,running=0,paused=0,gap=150,speed=2;
-    function draw(){ctx.fillStyle='#70c5ce';ctx.fillRect(0,0,300,450);ctx.fillStyle='#ded895';ctx.fillRect(0,410,300,40);ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(50,birdY,15,0,7);ctx.fill();ctx.fillStyle='#000';ctx.beginPath();ctx.arc(55,birdY-5,3,0,7);ctx.fill();pipes.forEach(p=>{ctx.fillStyle='#4caf50';ctx.fillRect(p.x,0,40,p.top);ctx.fillRect(p.x,p.top+gap,40,450-p.top-gap)});ctx.fillStyle='#fff';ctx.font='20px sans-serif';ctx.fillText(score,20,40);ctx.font='12px sans-serif';ctx.fillText('最高: '+best,20,60);if(!running&&!paused){ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(0,0,300,450);ctx.fillStyle='#fff';ctx.font='24px sans-serif';ctx.textAlign='center';ctx.fillText('点击开始',150,200)}}
+    let birdY=225,birdV=0,pipes=[],score=0,best=0,running=0,paused=0,gap=170,speed=1.8;
+    function draw(){ctx.fillStyle='#70c5ce';ctx.fillRect(0,0,300,450);ctx.fillStyle='#ded895';ctx.fillRect(0,410,300,40);ctx.fillStyle='#ffeb3b';ctx.beginPath();ctx.arc(50,birdY,15,0,7);ctx.fill();ctx.fillStyle='#000';ctx.beginPath();ctx.arc(55,birdY-5,3,0,7);ctx.fill();pipes.forEach(p=>{ctx.fillStyle='#4caf50';ctx.fillRect(p.x,0,40,p.top);ctx.fillRect(p.x,p.top+gap,40,450-p.top-gap)});ctx.fillStyle='#fff';ctx.font='20px sans-serif';ctx.textAlign='right';ctx.fillText(score,286,40);ctx.font='12px sans-serif';ctx.fillText('最高: '+best,286,60);ctx.textAlign='left';if(!running&&!paused){ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(0,0,300,450);ctx.fillStyle='#fff';ctx.font='24px sans-serif';ctx.textAlign='center';ctx.fillText('点击开始',150,200)}}
     function resetState(){running=0;paused=0;birdY=225;birdV=0;pipes=[];score=0;}
     function update(){if(!running||paused)return;birdV+=0.4;birdY+=birdV;if(birdY<15||birdY>435){running=0;paused=0;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,300,450);ctx.fillStyle='#f44336';ctx.font='28px sans-serif';ctx.textAlign='center';ctx.fillText('游戏结束',150,200);ctx.fillStyle='#fff';ctx.font='16px sans-serif';ctx.fillText('得分: '+score,150,240);ctx.fillText('最高: '+best,150,270);return}pipes.forEach(p=>{if(p.x+40<50&&p.x+40>10){score++;if(score>best)best=score}if(p.x<-40)pipes.shift()});pipes.forEach(p=>p.x-=speed);if(pipes.length==0||pipes[pipes.length-1].x<200)pipes.push({x:300,top:Math.random()*150+50});draw();if(running&&!paused)requestAnimationFrame(update)}
     function startGame(){if(!running&&!paused){resetState();running=1;update()}else if(paused){paused=0;running=1;update();}}
